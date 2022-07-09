@@ -1,0 +1,553 @@
+{% load static %}
+{% load only_hours %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Kumaca Robotics | {% block title%}Home{% endblock%}</title>
+  <meta content="Kumaca Robobtics Club Website" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'images/logo.png' %}" rel="icon">
+  <link href="{% static 'images/logo.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body style='background-color: #f6f9ff'>
+ 
+  <!-- ======= Header ======= -->
+
+
+  <header id="header" class="fixed-top d-flex align-items-center header-transparent" style="background-color:  #0205a1;">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo">
+        <h3 class='mt-3'>
+          <span><a href="/" style='font-family: monospace; font-size: 20px; color: white;'>
+            <img src="{% static 'images/logo.png' %}" alt="" class="img-fluid">
+            KUMACA ROBOTICS
+          </a>
+        </span>
+      </h3>
+       
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">About Us</a></li>
+          <li><a class="nav-link scrollto" href="#features">Blog</a></li>
+          <li><a class="nav-link scrollto" href="#gallery">Gallery</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact Us</a></li>
+          <li class="dropdown"><a href="javascript:void(0)">
+            <span>Account</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+                {% if request.user.is_authenticated %}
+                <li><a class="nav-link scrollto" href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                <li>
+                <a href='#' data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a>
+                </li>
+                {% else %}
+                <li>
+                <a href="{% url 'accounts:signup' %}">Sign Up</a>
+                </li>
+                <li>
+                <a href="#login">Log In</a>
+                <li>
+                {% endif %}
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+  
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button><!-- End modal-->
+                  </div>
+                <div class="modal-body">Are you sure you want to logout? <p class='text-danger'>logging out will end your current session</p>.</div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <a class="btn btn-warning" href="{% url 'accounts:logout' %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+    {% if messages %}
+    <div class="messages w-50 container-fluid">
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}
+            <button type="button" class="btn-close" style='float:right;' data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-7 pt-5 pt-lg-0 order-2 order-lg-1 d-flex align-items-center">
+          <div data-aos="zoom-out">
+            <h1>Welcome to <span>Kumaca Robotics</span></h1>
+            <h2>Creativity is our priority</h2>
+            <div class="text-center text-lg-start">
+              <a href="#about" class="btn-get-started scrollto">Get Started</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="300">
+          <img src="{% static 'images/logo.png' %}" class="img-fluid animated" alt="logo.png">
+        </div>
+      </div>
+    </div>
+
+    <svg class="hero-waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28 " preserveAspectRatio="none">
+      <defs>
+        <path id="wave-path" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z">
+      </defs>
+      <g class="wave1">
+        <use xlink:href="#wave-path" x="50" y="3" fill="rgba(255,255,255, .1)">
+      </g>
+      <g class="wave2">
+        <use xlink:href="#wave-path" x="50" y="0" fill="rgba(255,255,255, .2)">
+      </g>
+      <g class="wave3">
+        <use xlink:href="#wave-path" x="50" y="9" fill="#fff">
+      </g>
+    </svg>
+
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about m-1">
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-xl-5 col-lg-6 video-box " data-aos="fade-right">
+            <a href="https://www.youtube.com/channel/UCwrMuAifInsuVgK5rEMwMZA" target='_blank' class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
+          </div>
+
+          <div class="col-xl-7 col-lg-6 icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5" data-aos="fade-left">
+            <h3>Find Out More About Us</h3>
+            <p>Meet the country's future engineers from Kumasi Academy Senior High School. 
+              We are a team with an aim of taking the technological world to the next level with our amazing knowledgeable skills.
+
+            </p>
+
+            <div class="icon-box" data-aos="zoom-in" data-aos-delay="100">
+              <div class="icon"><i class="bx bx-bot"></i></div>
+              <h4 class="title"><a href="">What Is Robotics</a></h4>
+              <p class="description">Robotics is a branch of engineering and science that includes electronics engineering, mechanical engineering and computer science and so on. This branch deals with the design, construction, use to control robots, sensory feedback and information processing.</p>
+            </div>
+
+            <div class="icon-box" data-aos="zoom-in" data-aos-delay="200">
+              <div class="icon"><i class="bi bi-question-circle"></i></div>
+              <h4 class="title"><a href="">Why Robotics?</a></h4>
+              <p class="description">Robotics technology influences every aspect of work and home. Robotics has the potential to positively transform lives and work practices, raise efficiency and safety levels and provide enhanced levels of service.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- Blog -->
+
+
+{% if posts %}
+    <section id="features" class="features">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Blog</h2>
+          <p>Suggested for you</p>
+        </div>
+
+        <div class="row" data-aos="fade-left" data-aos-delay='500'>
+
+          
+
+
+<div class="container-fluid" data-aos='fade-up' data-aos-delay="500">
+
+    <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-2" data-aos='zoom-in'>
+        {% for p in posts %}
+        <div class="col">
+            <div class="card h-100 rounded shadow">
+                <div class="card-footer">
+                    <a class='link-success' href="{% url 'blog:category' p.category.slug %}"
+                    style='text-decoration:none;'>{{p.category|title}}</a>
+                </div>
+                <div class="card-body">
+                   <img src='{{p.image.url}}' style='height: 500px;' class='w-100 rounded'>
+                    
+                </div>
+                
+                <div class="card-footer">
+                   <h5 class="card-title h5 text-black">{{p.title}}</h5>
+                   <div class='text-muted'>
+                    <small class='m-2'> <i class='fa fa-clock'></i> {{p.date_published|timesince|upto:','}} ago</small>
+                    <small class='m-2'><i class='fas fa-eye'></i> {{p.total_views}}</small>
+                    <small class='m-2'>
+                        <a href="{% url 'blog:like_post' p.slug %}" class='text-decoration-none text-dark'>
+                        {% if request.user in p.likes.all %}
+                        
+                        <i class='bi bi-heart-fill text-danger'></i> 
+                        {% else %}
+                        <i class='bi bi-heart'></i> 
+                        {% endif %}
+                        </a>
+                            {{p.total_likes}}</small>
+                    <small class='m-2'><i class='bi bi-chat-right-text'></i> {{p.total_comments}}</small>
+                      </div>
+                    <p class="card-text mt-1 text-black">
+                      {{p.overview|truncatechars:120}}
+                  </p>
+                    <a href="{% url 'blog:post_detail' p.slug %}" class="btn btn-sm btn-primary" style='float: right;'>Read more</i></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+      </div>
+    </section><!-- Blog -->
+    {% endif %}
+
+
+    {% if not request.user.is_authenticated%}
+    <!-- ======= Log in Section ======= -->
+
+    <section id="details" class="details">
+      <div class="container">
+       
+        <div class="section-title" data-aos="fade-up">
+          <h2>Login</h2>
+          <p>join us today</p>
+        </div>
+
+<div class="container login" id='login'>
+    <div class="row align-items-center g-lg-5 py-5" >
+      <div class="col-lg-7">
+        <div>
+          <img class='rounded mb-3 shadow img-fluid w-100' data-aos='fade-right' src="{% static 'images/cover.png' %}" style='height: 420px; '>
+        </div> 
+      </div>
+
+      <div class="col-md-10 mx-auto col-lg-5" data-aos='fade-left'>
+        <form action="{% url 'accounts:login' %}" method='post' class="p-4 p-md-5 border rounded-3 bg-light">{% csrf_token%}
+          <center><h2>Log In</h2></center>
+          <div class="form-floating mb-3">
+            <input type="text" name="username" class="form-control" required id="floatingInput" placeholder="Username">
+            <label for="floatingInput">Username</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" name="password" class="form-control" required id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+          </div>
+          <div class=" mb-3 text-muted">
+            <label>
+              <input type="checkbox" value="remember-me" class='m-2 form-check-input'> Remember me
+            </label>
+          </div>
+          <button class="w-100 btn text-white mb-3 rounded-pill btn-lg btn-warning" type="submit">Log In</button>
+        
+          <a href="{% url 'accounts:signup' %}" class="text-decoration-none">Haven't joined yet? <br></a>
+          <small class="text-muted">By clicking log in, you agree to the terms of use.</small>
+        </form>
+      </div>
+
+    </div>
+  </div>
+      </div>
+    </section>
+        <!-- Log in Section -->
+        {%endif%}
+
+
+
+    <!-- ======= Gallery Section ======= -->
+    <section id="gallery" class="gallery">
+      <div class="container">
+
+        <div class="section-title p-2" data-aos="fade-up">
+          <h2>Gallery</h2>
+          <p>Check our Gallery</p>
+        </div>
+
+        <div class="row g-0" data-aos="fade-left">
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+              <a href="{% static 'assets/img/gallery/gallery-1.jpg' %}" class="gallery-lightbox">
+                <img style='height: 300px;' src="{% static 'assets/img/gallery/gallery-1.jpg' %}" alt="" class="img-fluid w-100 rounded">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="150">
+              <a href="{% static 'assets/img/gallery/gallery-2.jpg' %}" class="gallery-lightbox">
+                <img style='height: 300px;' src="{% static 'assets/img/gallery/gallery-2.jpg' %}" alt="" class="img-fluid w-100 rounded">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+              <a href="{% static 'assets/img/gallery/gallery-3.jpg' %}" class="gallery-lightbox">
+                <img style='height: 300px;' src="{% static 'assets/img/gallery/gallery-3.jpg' %}" alt="" class="img-fluid w-100 rounded">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
+              <a href="{% static 'assets/img/gallery/gallery-4.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'assets/img/gallery/gallery-4.jpg' %}" style='height: 300px;' alt="" class="img-fluid w-100 rounded">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+              <a href="{% static 'assets/img/gallery/gallery-5.jpg' %}" class="gallery-lightbox">
+                <img style='height: 300px;' src="{% static 'assets/img/gallery/gallery-5.jpg' %}" alt="" class="img-fluid w-100 rounded">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="350">
+              <a href="{% static 'assets/img/gallery/gallery-6.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'assets/img/gallery/gallery-6.jpg' %}" style='height: 300px;' alt="" class="w-100 img-fluid rounded">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
+              <a href="{% static 'assets/img/gallery/gallery-7.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'assets/img/gallery/gallery-7.jpg' %}" style='height: 300px;' alt="" class="img-fluid w-100 rounded">
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4">
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="450">
+              <a href="{% static 'assets/img/gallery/gallery-8.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'assets/img/gallery/gallery-8.jpg' %}" style='height: 300px;' alt="" class="img-fluid w-100 rounded">
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Gallery Section -->
+
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact shadow-lg">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Contact</h2>
+          <p>Contact Us</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-4" data-aos="fade-right" data-aos-delay="100">
+            <div class="info">
+              <div class="address">
+                <i class="bi bi-geo-alt"></i>
+                <h4>Location:</h4>
+                <p>Asokore Mampong, Kumasi, Ghana</p>
+              </div>
+
+              <div class="email">
+                <i class="bi bi-envelope"></i>
+                <h4>Email:</h4>
+                <p>kumacasciclub05@gmail.com</p>
+              </div>
+
+              <div class="phone">
+                <i class="bi bi-phone"></i>
+                <h4>Call:</h4>
+                <p>+233 59 398 3958</p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-8 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
+
+            <form action="" method="post" role="form" class="php-email-form">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+              </div>
+              <div class="form-group mt-3">
+                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+              </div>
+              <div class="my-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+
+
+  <!-- ======= Footer ======= -->
+  
+
+  <footer id="footer">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6" data-aos='fade-right' data-aos-delay="300">
+            <div class="footer-info">
+              <h3>KUMACA ROBOTICS</h3>
+              <p class="pb-3"><em>Creativity is our priority</em></p>
+              <p>
+                Asokore Mampong <br>
+                Kumasi, Ghana<br><br>
+                <strong>Phone:</strong> +233 59 398 3958<br>
+                <strong>Email:</strong> kumacasciclub05@gmail.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="www.twitter.com" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="www.facebook.com" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a href="www.instagram.com" class="instagram"><i class="bx bxl-instagram"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links" data-aos='fade-up' data-aos-delay='400'>
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="/">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+              {% if request.user.is_authenticated %}
+              <li><i class="bx bx-chevron-right"></i><a href='#' data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a></li>
+              {% else %}
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'accounts:login' %}">Log In</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'accounts:signup' %}">Sign Up</a></li>
+              {% endif %}
+
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+              
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links" data-aos='fade-down' data-aos-delay='500'>
+            <h4>Blog</h4>
+            <ul>
+              
+              <li><i class="bx bx-chevron-right"></i> <a href="#about">About Us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#contact">Contact Us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#blog">Blog</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#gallery">Gallery</a></li>
+              
+            
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter" data-aos='zoom-in' data-aos-delay='300'>
+            <h4>Our Newsletter</h4>
+            <p>Join our newsletter Services to keep updated.</p>
+            <form action="{% url 'blog:subscribe' %}" method="post">{%csrf_token%}
+              <input type="email" name="email" placeholder='Email address'><input  type="submit" value="Subscribe">
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Kumaca Robotics Club</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+       
+        Designed by <a href="">Incredible Programmer
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/waypoints/noframework.waypoints.js' %}"></script>
+
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+</html>

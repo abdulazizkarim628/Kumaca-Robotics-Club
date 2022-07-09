@@ -1,0 +1,266 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% load only_hours %}
+{% block content %}
+<div class='container-fluid'>
+    <div class="row flex-lg-nowrap">
+        <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+            <div class="card p-3">
+                <div class="e-navlist e-navlist--active-bg">
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link px-2 active" href="{% url 'accounts:profile' request.user %}"><i
+                                class="bi bi-window-split mr-1"></i><span>Overview</span></a></li>
+                        <li class="nav-item"><a class="nav-link px-2"
+                                                href="{% url 'accounts:changepassword' %}"><i
+                                class="bi bi-lock"></i><span> Change Password</span></a></li>
+                        <li class="nav-item"><a class="nav-link px-2"
+                                                href="{% url 'accounts:profile' request.user %}"
+                                                target="__blank"><i
+                                class="bi bi-person mr-1"></i><span> Profile</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="row">
+                <div class="col mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="e-profile">
+                                <div class="row">
+                                    <div class="col-12 col-sm-auto mb-3">
+                                        <div class="mx-auto" style="width: 140px;">
+                                            <div class="d-flex justify-content-center align-items-center rounded">
+                                                <img src='{{user.author.profile_picture.url}}' height="140px"
+                                                     width="140px" style="border-radius:10px;" class='img-fluid'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                        <div class="text-center text-sm-left mb-2 mb-sm-0">
+                                            <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{user.get_full_name}}</h4>
+                                            <p class="mb-0">{{user}}</p>
+                                            <div class="text-muted"><small>Last login {{user.last_login|timesince|upto:','}}
+                                                ago.</small></div>
+                                            <div class="mt-2">
+
+                                                <div class="mb-3">
+                                                    <form class="form" method='POST' enctype="multipart/form-data"
+                                                          novalidate>{% csrf_token %}
+                                                        <label class="form-label">
+                                                            <span>
+                                                            <i class="fa fa-fw fa-camera"></i>
+                                                            <span>Change Photo</span>
+
+                                                            </span>
+                                                        </label>
+
+                                                        
+                                                        {{a_form.profile_picture|as_crispy_field}}
+                                                </div>
+                                            <a href='#save-changes' class='btn btn-outline-success'>save <i class='fa fa-save m-2'></i></a>
+                                            </div>
+
+                                        </div>
+                                        <div class="text-center text-sm-right">
+                                            <span class="badge badge-primary">Author</span>
+                                            <div class="text-muted"><small>Joined at <i>{{user.date_joined}}</i></small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item"><a href="" class="active nav-link">Profile Settings</a></li>
+                                </ul>
+                                <div class="tab-content pt-3">
+                                    <div class="tab-pane active">
+
+                                        <div class="row">
+                                            <div class="col">
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{u_form.username|as_crispy_field}}
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{u_form.first_name|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{u_form.last_name|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{u_form.email|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col mb-3">
+                                                        <div class="form-group">
+
+                                                            {{a_form.bio|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{a_form.gender|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{a_form.birthday|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{a_form.country|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{a_form.address|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{a_form.workplace|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            {{a_form.phone_number|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{a_form.whatsapp_link|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+
+                                                    {{a_form.personal_website|as_crispy_field}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-12 col-sm-5mb-3">
+                                                <div class="mb-2"><b>Social Media Links</b></div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            {{a_form.facebook_page|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{a_form.instagram_page|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col">
+                                                        <div class="form-group">
+
+                                                            {{a_form.twitter_page|as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col d-flex justify-content-end">
+                                                <button id='save-changes' type="submit" class="btn btn-outline-info">Save Changes <i
+                                                        class='h5 bi bi-check-lg'></i></button>
+                                            </div>
+                                        </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3 mb-3">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="px-xl-3">
+                                <button class="btn btn-block btn-secondary" data-toggle="modal"
+                                        data-target="#logoutModal">
+                                    <i class="fa fa-sign-out"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title font-weight-bold">Support</h6>
+                            <p class="card-text">Get fast, free help from our friendly assistants.</p>
+                            <a href="{% url 'blog:contact_us' %}">
+                            <button type="button" class="btn btn-primary">Contact Us</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

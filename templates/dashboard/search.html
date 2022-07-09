@@ -1,0 +1,60 @@
+{% extends 'dashboard/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<h4 class='text-center'>Showing Result{{authors|pluralize}} For : <b>{{ q }}</b></h4>
+<form method='get' action='{% url 'accounts:dashboard_search' %}'>
+    <div class="input-group mb-3 container-lg">
+          <input type="text" required class="form-control" name='q' placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+          <button type='submit' class="input-group-text" id="basic-addon2"><i class='bi bi-search'></i></button>
+        </div>
+    </form>
+<div class="m-3">
+    <div class="row">
+        {% if authors %}
+        
+        {% for author in authors %}
+        <div class="col col-md-3 mt-3">
+            <div class="card user-card h-70 shadow">
+                <div class="card-block">
+                    
+                    <div class="user-image">
+                        <a href="{% url 'accounts:profile' author.user %}">
+                        <img src="{{author.profile_picture.url}}" draggable='false' class="rounded-circle"
+                             alt="User-Profile-Image">
+                        </a>
+                    </div>
+                    <h4 class="text-dark">{{author}}</h4>
+                    
+                    <p class="m-t-15 text-muted">
+                        <a href="{% url 'accounts:profile' author.user %}">
+                        {% if author.bio %}
+                        {{author.bio}}
+                        {% endif %}
+                    </a>
+
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+        {%else%}
+        <div class='text-center'>
+            <div class="alert alert-info"><b>No author has such name</b></div>
+        </div>
+            <h5> Suggestions: </h5>
+    <ul class='list-group container ml-5 '>
+        <li class='list-item'> Make sure that all words are spelled correctly.</li>
+        <li class='list-item'> Try different keywords.</li>
+        <li class='list-item'> Try more general keywords.</li>
+        <li class='list-item'> Try fewer keywords.</li>
+    </ul>
+
+        {%endif%}
+    </div>
+</div>
+
+
+{%endblock content %}

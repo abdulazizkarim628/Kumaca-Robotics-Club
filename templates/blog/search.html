@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block link1 %}Blog{% endblock %}{% block endlink %}Search{% endblock %}
+
+{% block title %}Search Results{% endblock %}
+{% block content %}
+{% load only_hours %}
+
+<div class="col-md-12 mb-3">
+
+    <h3 class="text-center pb-2 m-1" data-aos='fade-down' >
+        
+        {% if not search_results.number == 1 %}
+        Showing Page {{ search_results.number }} of {{ search_results.paginator.num_pages }}.
+        {% else %}
+        {% if search %}
+        Showing result{{post|pluralize}} for: <b>{{ search }}</b>
+        {% else %}
+        Showing Page {{ search_results.number }} of {{ search_results.paginator.num_pages }}.
+        {% endif %}
+        {%endif%}
+    </h3>
+    <form method='get' action='{% url 'blog:search' %}' data-aos='fade-up'>
+    <div class="input-group mb-3 container-lg">
+          <input type="text" required class="form-control" name='q' placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+          <button type='submit' class="input-group-text" id="basic-addon2"><i class='bi bi-search'></i></button>
+        </div>
+    </form>
+    <br>
+
+
+    {% if search_results %}
+    <div class="container-fluid" id="search results" data-aos='zoom-in' data-aos-delay='500'>
+
+        <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-2">
+            {% for p in search_results %}
+        <div class="col mt-4">
+            <div class="card h-100 rounded shadow">
+                <div class="card-footer">
+                    <a class='link-success' href="{% url 'blog:category' p.category.slug %}"
+                    style='text-decoration:none;'>{{p.category|title}}</a>
+                </div>
+                <div class="card-body">
+                   <img src='{{p.image.url}}' style='height: 500px;' class='rounded w-100'>
+                    
+                </div>
+                
+                <div class="card-footer">
+                   <h5 class="card-title h5 text-black">{{p.title}}</h5>
+                   <div class='text-muted'>
+                    <small class='m-2'> <i class='fa fa-clock'></i> {{p.date_published|timesince|upto:','}} ago</small>
+                    <small class='m-2'><i class='fas fa-eye'></i> {{p.total_views}}</small>
+                    <small class='m-2'>
+                        <a href="{% url 'blog:like_post' p.slug %}" class='text-decoration-none text-dark'>
+                        {% if request.user in p.likes.all %}
+                        
+                        <i class='bi bi-heart-fill text-danger'></i> 
+                        {% else %}
+                        <i class='bi bi-heart'></i> 
+                        {% endif %}
+                        </a>
+                            {{p.total_likes}}</small>
+                    <small class='m-2'><i class='bi bi-chat-right-text'></i> {{p.total_comments}}</small>
+                      </div>
+                    <p class="card-text mt-1 text-black">
+                      {{p.overview|truncatechars:120}}
+                  </p>
+                    <a href="{% url 'blog:post_detail' p.slug %}" class="btn btn-sm btn-primary" style='float: right;'>Read more</i></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="col-lg-10 container" data-aos='zoom-out'>
+    <h3>Your search - <b>{{ search }}</b> - did not match any documents.</h3>
+
+    <h5> Suggestions: </h5>
+    <ul class='list-group'>
+        <li class='list-item'> Make sure that all words are spelled correctly.</li>
+        <li class='list-item'> Try different keywords.</li>
+        <li class='list-item'> Try more general keywords.</li>
+        <li class='list-item'> Try fewer keywords.</li>
+    </ul>
+
+</div>
+{% endif %}
+
+
+<nav class='ontainer-fluid'>
+    {% if search_results.has_other_pages %}
+    <ul class='pagination pagination-sm justify-content-center'>
+        {# Displays previous pages #}
+        {% if search_results.has_previous %}
+        <li class='page-item'>
+            <a class="page-link" href="?page=1"><i class='fa fa-angle-double-left'></i> First</a>
+        </li>
+        <li class='page-item'>
+            <a class="page-link"
+               href="?page={{ search_results.previous_page_number }}"><i class='fa fa-angle-left'></i> Previous
+            </a>
+        </li>
+
+        {% endif %}
+
+        {# Displays current page #}
+        {% for num in search_results.paginator.page_range %}
+        {% if search_results.number == num %}
+        <li class='page-item active'>
+            <a class="page-link" href="#">{{ num }}</a></li>
+
+        {% elif num > search_results.number|add:'-3' and num < search_results.number|add:'3' %}
+        <li class='page-item'>
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {# Displays next pages #}
+        {% if search_results.has_next %}
+        <li class='page-item'>
+            <a class="page-link"
+               href="?page={{ search_results.next_page_number }}">Next <i class='fa fa-angle-right'></i>
+            </a>
+        </li>
+        <li class='page-item'>
+            <a class="page-link"
+               href="?page={{ search_results.paginator.num_pages }}">Last <i class='fa fa-angle-double-right'></i>
+            </a>
+        </li>
+        {% endif %}
+
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}
+
+
+

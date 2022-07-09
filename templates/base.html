@@ -1,0 +1,228 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Kumaca Robotics | {% block title%}Home{% endblock%}</title>
+  <meta content="Kumaca Robobtics Club Website" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'images/logo.png' %}" rel="icon">
+  <link href="{% static 'images/logo.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+ 
+  <!-- ======= Header ======= -->
+    
+  <header id="header" class="sticky-top d-flex align-items-center header-transparent" style="background-color:  #0205a1;">
+    <div class="container d-flex align-items-center justify-content-between">
+
+
+      <div class="logo">
+        <h3 class='mt-3'><span><a href="/" style='font-family: monospace; font-size: 20px; color: white;'>
+          <img src="{% static 'images/logo.png' %}" alt="" class="img-fluid">
+          KUMACA ROBOTICS
+        </a> </span></h3>
+       
+      </div>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+          
+          
+          <li><a class="nav-link scrollto" href="{% url 'blog:contact_us' %}">Contact Us</a></li>
+
+          
+          <li class="dropdown"><a href="javascript:void(0)"><span>Account </span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              
+              <li>
+                {% if request.user.is_authenticated %}
+                
+                <a href='#' data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a>
+
+                {% else %}
+                <a href="{% url 'accounts:signup' %}">Sign Up</a>
+              </li>
+              <li>
+                <a href="{% url 'accounts:login' %}">Log In</a>
+                {% endif %}
+              </li>
+              
+            </ul>
+          </li>
+          <li>
+            
+            <form class="d-flex input-group" style='margin-left: 20px; width: 200px;' method="get" action="{% url 'blog:search' %}">
+              <input class="form-control" name="q" required type="search" placeholder="Search the blog" aria-label="Search">
+              <button class="btn btn-outline-warning" type="submit"><i class="bi-search"></i></button>
+          </form>
+
+          </li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <div class="pagetitle">
+    <nav>
+      <ol class="breadcrumb m-3">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item">{% block link1 %}{% endblock %}</li>
+        <li class="breadcrumb-item active">{% block endlink %}{% endblock %}</li>
+      </ol>
+    </nav>
+  </div>
+
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button><!-- End modal-->
+                  </div>
+                <div class="modal-body">Are you sure you want to logout? <p class='text-danger'>logging out will end your current session</p>.</div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <a class="btn btn-warning" href="{% url 'accounts:logout' %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<div class="container-fluid">
+  {% block content %}
+  {% endblock %}
+</div>
+
+  <!-- ======= Footer ======= -->
+  
+
+  <footer id="footer">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6" data-aos='fade-right' data-aos-delay="300">
+            <div class="footer-info">
+              <h3>KUMACA ROBOTICS</h3>
+              <p class="pb-3"><em>Creativity is our priority</em></p>
+              <p>
+                Asokore Mampong <br>
+                Kumasi, Ghana<br><br>
+                <strong>Phone:</strong> +233 59 398 3958<br>
+                <strong>Email:</strong> kumacasciclub05@gmail.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="www.twitter.com" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="www.facebook.com" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a href="www.instagram.com" class="instagram"><i class="bx bxl-instagram"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links" data-aos='fade-up' data-aos-delay='400'>
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="/">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+              {% if request.user.is_authenticated %}
+              <li><i class="bx bx-chevron-right"></i> <a href='#' data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a></li>
+              {% else %}
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'accounts:login' %}">Log In</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'accounts:signup' %}">Sign Up</a></li>
+              {% endif %}
+
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+              
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links" data-aos='fade-down' data-aos-delay='500'>
+            <h4>Blog</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="/#about">About Us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blog:contact_us' %}">Contact Us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/#blog">Blog</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/#gallery">Gallery</a></li>
+              
+            
+            
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter" data-aos='zoom-in' data-aos-delay='300'>
+            <h4>Our Newsletter</h4>
+            <p>Join our newsletter Services to keep updated.</p>
+            <form action="{% url 'blog:subscribe' %}" method="post">{%csrf_token%}
+              <input type="email" name="email" placeholder='Email address'><input  type="submit" value="Subscribe">
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Kumaca Robotics Club</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+       
+        Designed by <a href="">Incredible Programmer
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/waypoints/noframework.waypoints.js' %}"></script>
+
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>

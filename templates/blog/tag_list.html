@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load remove_hashtag %}
+{% load only_hours %}
+{% block title %}
+Tags
+{% endblock title %}
+{% block link1 %}Tags{% endblock %}{% block endlink %}{{tag_name|remove_hashtag}}{% endblock %}
+{% block content %}
+
+
+
+<section class="blog-area section">
+    <div class="container-fluid" data-aos='fade-up'>
+        <!-- Messages -->
+        <div class="row">
+            <div class="col-md-12">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="text-center font-weight-bold alert
+                           {% if message.level_tag == 'error' %}
+                           alert-danger
+                           {% else %}
+                           alert-{{ message.tags }}
+                           {% endif %}">
+
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+
+        <!-- Results -->
+        {% if tag_articles_list %}
+        <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-2">
+          {% for p in tag_articles_list %}
+          <div class="col mt-4" data-aos='zoom-in'>
+              <div class="card h-100 rounded shadow">
+                  <div class="card-footer">
+                      <a class='link-success' href="{% url 'blog:category' p.category.slug %}"
+                      style='text-decoration:none;'>{{p.category|title}}</a>
+                  </div>
+                  <div class="card-body">
+                     <img src='{{p.image.url}}' class='h-100 rounded w-100'>
+                      
+                  </div>
+                  
+                  <div class="card-footer">
+                     <h5 class="card-title h5 text-black">{{p.title}}</h5>
+                     <div class='text-muted'>
+                      <small class='m-2'> <i class='fa fa-clock'></i> {{p.date_published|timesince|upto:','}} ago</small>
+                      <small class='m-2'><i class='fas fa-eye'></i> {{p.total_views}}</small>
+                      <small class='m-2'>
+                          <a href="{% url 'blog:like_post' p.slug %}" class='text-decoration-none text-dark'>
+                          {% if request.user in p.likes.all %}
+                          
+                          <i class='bi bi-heart-fill text-danger'></i> 
+                          {% else %}
+                          <i class='bi bi-heart'></i> 
+                          {% endif %}
+                          </a>
+                              {{p.total_likes}}</small>
+                      <small class='m-2'><i class='bi bi-chat-right-text'></i> {{p.total_comments}}</small>
+                        </div>
+                      <p class="card-text mt-1 text-black">
+                        {{p.overview|truncatechars:120}}
+                    </p>
+                      <a href="{% url 'blog:post_detail' p.slug %}" class="btn btn-sm btn-primary" style='float: right;'>Read more</i></a>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+        </div><!-- row -->
+        {% endif %}
+        {# Pagination for article post #}
+        {% if is_paginated %}
+
+        {# Displays previous pages #}
+        {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4"
+           href="?page={{ page_obj.previous_page_number }}">Previous
+        </a>
+        {% endif %}
+
+        {# Displays current page #}
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+        {% endfor %}
+
+        {# Displays next pages #}
+        {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4"
+           href="?page={{ page_obj.next_page_number }}">Next
+        </a>
+        <a class="btn btn-outline-info mb-4"
+           href="?page={{ page_obj.paginator.num_pages }}">Last
+        </a>
+        {% endif %}
+
+        {% endif %}
+
+    </div><!-- container -->
+</section><!-- section -->
+{% endblock content %}

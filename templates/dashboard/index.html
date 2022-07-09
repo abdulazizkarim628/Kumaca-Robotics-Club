@@ -1,0 +1,276 @@
+{% extends 'dashboard/base.html' %} {% load static %} {% load only_hours %} {%block content %}
+
+<div class="container-sm" data-aos='fade-left'>
+  <div class="row">
+    <div class="col-xl-3 col-md-3 mb-1">
+      <div class="card border-left-success shadow h-90 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Published Posts
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{total_posts_published}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-layer-forward fa-2x text-success"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-3 mb-1">
+      <div class="card border-left-primary shadow h-90 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Total Comments
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{total_posts_comments}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-chat-right-text fa-2x text-primary"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-3 mb-1">
+      <div class="card border-left-info shadow h-90 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                Total Posts Views
+              </div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                    {{total_posts_views}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-eye fa-2x text-info"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-3 mb-1">
+      <div class="card border-left-danger shadow h-90 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                Total Likes
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{total_posts_likes}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-heart fa-2x text-danger"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment "" %} Recent Published posts {% endcomment %}
+
+  <div class="mt-3 h1 text-center">Recent posts</div>
+  <div class="card m-auto">
+    {% if recent_published_posts_list %}
+    <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-2">
+
+      
+      {% for p in recent_published_posts_list%}
+      <div class="col mt-4">
+          <div class="card h-100 rounded shadow">
+              <div class="card-footer">
+                  <a class='link-success' href="{% url 'blog:category' p.category.slug %}"
+                  style='text-decoration:none;'>{{p.category|title}}</a>
+
+                  <div class="float-right">
+                    <small>
+                      <a data-toggle="modal" data-target="#deleteModal{{p.id}}" class="btn btn-sm" href="javascript:void(0)">
+                        <i class="bi bi-trash"></i></a>
+                      <div class="modal fade" id="deleteModal{{p.id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">
+                                <b>Are you sure you want to delete
+                                  <i class="text-danger">'{{p.title|title}}'</i></b>
+                              </h5>
+                              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              Select "Delete" below if you want to delete the post
+                            </div>
+                            <div class="modal-footer">
+                              <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                                Cancel
+                              </button>
+                              <a class="btn btn-danger" href="{% url 'accounts:delete_post' p.slug %}">Delete</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </small>
+                    <small>
+                      <a href="{% url 'accounts:update_post' p.slug %}" class="btn btn-sm"><i class="fa fa-edit"></i>
+                      </a>
+                    </small>
+                  </div>
+              </div>
+              <div class="card-body">
+                 <img src='{{p.image.url}}' style='height: 400px;' class='rounded w-100'>
+                  
+              </div>
+              
+              <div class="card-footer">
+                 <h5 class="card-title h5 text-black">{{p.title}}</h5>
+                 <div class='text-muted'>
+                  <small class='m-2'> <i class='fa fa-clock'></i> {{p.date_published|timesince|upto:','}} ago</small>
+                  <small class='m-2'><i class='fas fa-eye'></i> {{p.total_views}}</small>
+                  <small class='m-2'>
+                      <a href="{% url 'blog:like_post' p.slug %}" class='text-decoration-none text-dark'>
+                      {% if request.user in p.likes.all %}
+                      
+                      <i class='bi bi-heart-fill text-danger'></i> 
+                      {% else %}
+                      <i class='bi bi-heart'></i> 
+                      {% endif %}
+                      </a>
+                          {{p.total_likes}}</small>
+                  <small class='m-2'><i class='bi bi-chat-right-text'></i> {{p.total_comments}}</small>
+                    </div>
+                  <p class="card-text mt-1 text-black">
+                    {{p.overview|truncatechars:120}}
+                </p>
+                  <a href="{% url 'accounts:dashboard_post_detail' p.slug %}" class="btn btn-sm btn-primary" style='float: right;'>Read more</i></a>
+              </div>
+          </div>
+      </div>
+      {% endfor %}    </div>
+    {%else%}
+    <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+      Dear {{request.user}} you have't created any post yet
+      <a href="{% url 'accounts:create_post' %}" class="float-lg-right alert-link btn btn-secondary">Get started</a>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {%endif%}
+  </div>
+
+  <div class="row flex-grow mt-3">
+    <div class="col-md-6 col-lg-6 grid-margin stretch-card">
+      <div class="card card-rounded">
+        <div class="card-body card-rounded">
+          <h4 class="card-title card-title-dash">Popular authors</h4>
+
+          {% for a in popular_authors %}
+          <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
+            <div class="d-flex">
+              <img class="img-profile rounded-circle" width="50" src="{{a.profile_picture.url}}" />
+              <div class="wrapper ms-3">
+                <p class="ms-1 mb-1 fw-bold">
+                  {% if a == request.user.author %}You{%else%}{{a}}{%endif%}
+                </p>
+                <small class="text-muted mb-0"><b class='text-success'>Posts published</b>: {{a.posts.count}}</small>
+              </div>
+            </div>
+            <div class="text-muted text-small">
+              <a class="btn btn-sm btn-outline-secondary" href="{% url 'accounts:profile' a %}">View profile</a>
+            </div>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6 grid-margin stretch-card">
+      <div class="card card-rounded">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h4 class="card-title card-title-dash">Your Recent Activities</h4>
+            <p class="mb-0 text-success">
+              <span class="badge badge-danger">{{all_activities.count}}</span>
+              <small>recorded so far</small>
+            </p>
+          </div>
+          {%if recent_activities%}
+          <ul class="list-group">
+            {% for a in recent_activities %}
+            <li class="list-group-item list-group-item-{{a.level}}">
+              <div class="d-flex justify-content-between">
+                <div><span>{{a.activity}}</span></div>
+                <small class="text-dark">{{a.activity_date|timesince|upto:','}} ago</small>
+              </div>
+            </li>
+            {%endfor%}
+          </ul>
+          {%else%} No activity has been recorded so far {%endif%}
+
+          <div class="list align-items-center pt-3">
+            <div class="wrapper w-100">
+              <p class="mb-0">
+                <a href="{% url 'accounts:activitylog' %}" class="fw-bold text-primary">Show all <i
+                    class="mdi mdi-arrow-right ms-2"></i></a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row flex-grow">
+    <div class="col-12 grid-margin stretch-card">
+      <div class="card card-rounded">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h4 class="card-title card-title-dash">
+                    Newly joined authors in your country
+                  </h4>
+                </div>
+              </div>
+              <div class="mt-3">
+                {% for a in authors_arround %}
+                <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
+                  <div class="d-flex">
+                    <img class="img-profile rounded-circle" width="50" src="{{a.profile_picture.url}}" />
+                    <div class="wrapper ms-3">
+                      <p class="ms-1 mb-1 fw-bold">{{a}}</p>
+                      <small class="text-muted"><b class='text-success'>Posts published</b>: {{a.posts.count}}</small>
+                    </div>
+                  </div>
+                  <div class="text-muted">
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'accounts:profile' a %}">View profile</a>
+                  </div>
+                </div>
+                {%endfor%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

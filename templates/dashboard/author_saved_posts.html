@@ -1,0 +1,159 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load only_hours %}
+
+{% block title %}
+Saved Posts
+{% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+<link href="{% static 'dashboard/author/css/dashboard-article.css' %}" rel="stylesheet"/>
+{% endblock stylesheets %}
+
+
+{% block content %}
+<div class="container mb-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4 class="title">Saved Posts</h4>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <section class="blog-list px-3 py-5 p-md-5">
+                            {% if saved_posts %}
+                            <div class="container">
+                                {% for article in saved_posts %}
+                                <div class="item mb-5">
+                                    <div class="media">
+                                        <img style="border-radius:10px; height: 400px;" class="mr-3 img-fluid post-thumb d-none d-md-flex" width="352" height="235"
+                                             src="{{ article.image.url }}" alt="image">
+                                        <div class="media-body">
+                                            <h3 class="title mb-1"><a
+                                                    href="{% url 'accounts:dashboard_post_detail' slug=article.slug %}">{{article.title }}</a></h3>
+                                            <div class="meta mb-1">
+                                                <span class="date"><b>Published</b> <i>{{ article.date_published|timesince|upto:',' }} ago</i></span>
+                                                
+                                                </span><br>
+                                                <span class="time">{{ article.count_words }} word{{ article.count_words|pluralize }}</span><br>
+                                                <span class="time">{{ article.read_time }} min{{ article.read_time|pluralize }} read</span>
+                                                <div class="time">
+                                                        <i class="fas fa-chevron-down" data-toggle="dropdown"
+                                                           aria-haspopup="true" aria-expanded="false">
+                                                        </i>
+                                                        <div class="dropdown-menu">
+                                                            <a class="dropdown-item"
+                                                               href="{% url 'blog:save_post' post_slug=article.slug %}">Remove</a>
+                                                      </div>
+                                            </div>
+                                            <a class="btn btn-sm btn-outline-secondary"
+                                               href="{% url 'accounts:dashboard_post_detail' slug=article.slug %}">View
+                                                details &rarr;</a>
+                                            <hr class="solid"><!-- Solid divider -->
+                                        </div><!--//media-body-->
+                                    </div><!--//media-->
+                                </div><!--//item-->
+                                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"><b>Ready to Delete
+                                                    Post?</b></h5>
+                                                <button
+                                                        class="close"
+                                                        type="button"
+                                                        data-dismiss="modal"
+                                                        aria-label="Close"
+                                                >
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Select "Delete Post" below if you want to delete the post.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button
+                                                        class="btn btn-secondary"
+                                                        type="button"
+                                                        data-dismiss="modal"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <a class="btn btn-danger"
+                                                   href="{% url 'accounts:delete_post' slug=article.slug %}">Delete
+                                                    Post</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <center>
+                                <div class="alert alert-info"><b>You haven't saved any post yet</b></div>
+                            </center>
+                            {% endif %}
+                        </section>
+
+
+                        <nav class='container-fluid'>
+                            {% if saved_posts.has_other_pages %}
+                            <ul class='pagination pagination-sm justify-content-center'>
+                                {# Displays previous pages #}
+                                {% if saved_posts.has_previous %}
+                                <li class='page-item'>
+                                    <a class="page-link" href="?page=1"><i class='fa fa-angle-double-left'></i>
+                                        First</a>
+                                </li>
+                                <li class='page-item'>
+                                    <a class="page-link"
+                                       href="?page={{ saved_posts.previous_page_number }}"><i
+                                            class='fa fa-angle-left'></i> Previous
+                                    </a>
+                                </li>
+
+                                {% endif %}
+
+                                {# Displays current page #}
+                                {% for num in saved_posts.paginator.page_range %}
+                                {% if saved_posts.number == num %}
+                                <li class='page-item active'>
+                                    <a class="page-link" href="#">{{ num }}</a></li>
+
+                                {% elif num > saved_posts.number|add:'-3' and num < saved_posts.number|add:'3' %}
+                                <li class='page-item'>
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+
+                                {# Displays next pages #}
+                                {% if saved_posts.has_next %}
+                                <li class='page-item'>
+                                    <a class="page-link"
+                                       href="?page={{saved_posts.next_page_number }}">Next <i
+                                            class='fa fa-angle-right'></i>
+                                    </a>
+                                </li>
+                                <li class='page-item'>
+                                    <a class="page-link"
+                                       href="?page={{ saved_posts.paginator.num_pages }}">Last <i
+                                            class='fa fa-angle-double-right'></i>
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

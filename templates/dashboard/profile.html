@@ -1,0 +1,246 @@
+{% extends 'dashboard/base.html' %}
+
+{% load static %}
+{% block stylesheets %}
+{{block.super}}
+{% load only_hours %}
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+<!--profile Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Profile picture</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="h-100">
+          <div class="mx-auto">
+              <div class="d-flex justify-content-center align-items-center rounded">
+                  <img src='{{user.author.profile_picture.url}}' style='height: 400px;'
+                       width="450px" style="border-radius:10px;" class='img-fluid rounded'>
+              </div>
+          </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {% if user == request.user %}
+        <a href="{% url 'accounts:profile_update' %}" class="btn btn-primary">Change Photo <i class="bi bi-camera m-2"></i></a>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end profile Modal-->
+
+<div class='body m-2'>
+<div>
+    <div class="main-body">
+          {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+              {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+          {% endfor %}
+          {% endif %}
+          <div class="row gutters-sm">
+            <div class="col-md-4 mb-1">
+              <div class="card ">
+                <div class="card-body">
+                  <div class="d-flex flex-column align-items-center text-center">
+                    <img class="shadow-lg" data-toggle="modal" data-target="#exampleModalCenter" src="{{user.author.profile_picture.url}}" alt="{{user.username}}" draggable='false' height='150' style="border-radius: 10px; black;" width="150">
+                    <div class="mt-1">
+                      <h4 style="font-weight: bolder;">{{user.username}}<img class="m-2" src='{{user.author.country.flag}}'></h4>
+                      <p class="text-secondary mb-1" style="font-weight: bolder;">{% if user.author.bio %}
+                        ({{user.author.bio|safe}})
+                        {% endif %}</p>
+                        
+                      <p class="text-muted font-size-sm">
+                        {% if user.author.address %}
+                          <i class='fas fa-home'></i> Lives in <a style='text-decoration: none; font-weight: bolder;' href="https://www.google.com/search?q={{user.author.address}}" target="_blank">
+                        {{user.author.address}}</a>
+                        {%endif %}
+                            <br>
+                        {%if user.author.workplace%}
+       
+                        <i class='bi bi-person-workspace'></i> Works at<a style='text-decoration: none; font-weight: bolder;' href="https://www.google.com/search?q={{user.author.workplace}}" target="_blank">
+                          {{user.author.workplace}}
+                        </a>
+                      {%endif%}
+                      </p>
+                        
+                        {% if user == request.user%}
+                      <a href="{% url 'accounts:profile_update' %}" target="_blank" class="btn btn-outline-primary">Edit profile <i class="bi bi-pen"></i></a>
+                      {%endif%}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="col-md-8">
+              
+              
+    <div class="card">
+      <div class="card-header h5">Follow me on social media</div>
+      <hr>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+          
+          <a href='{{user.author.personal_website}}' target='__blank' class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Personal website</h6>
+            </a><span class="text-secondary">{{user.author.personal_website|truncatechars:25}}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+          <a href='{{user.author.whatsapp_link}}' target='__blank' class="mb-0">
+            <i class="text-success h4 bi bi-whatsapp"></i> Whatsapp</h6>
+          </a><span class="text-secondary">{{user.author.whatsapp_link|truncatechars:25}}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+          <a href='{{user.author.twitter_page}}' target='__blank' class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</a>
+          <span class="text-secondary">{{user.author.twitter_page|truncatechars:25}}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+          <a href='{{user.author.instagram_page}}' target='__blank' class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</a>
+          <span class="text-secondary">{{user.author.instagram_page|truncatechars:25}}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+          <a href='{{user.author.instagram_page}}' target='__blank' class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</a>
+          <span class="text-secondary">{{user.author.facebook_page|truncatechars:25}}</span>
+        </li>
+      </ul>
+    </div>
+            </div>
+          </div>
+
+        </div>
+    </div>
+
+    
+    <div class="row gutters-sm">
+                
+      <div class=" mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class='card m-auto'>
+              {% if trending_posts %}
+              <h4>Discover my most trending posts</h4>
+            <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-2">
+                
+                {% for p in trending_posts %}
+                <div class="col mt-4">
+                  <div class="card h-100 rounded shadow">
+                      <div class="card-footer">
+                          <a class='link-success' href="{% url 'blog:category' p.category.slug %}"
+                          style='text-decoration:none;'>{{p.category|title}}</a>
+        
+                          <div class="float-right">
+                            <small>
+                              <a data-toggle="modal" data-target="#deleteModal{{p.id}}" class="btn btn-sm" href="javascript:void(0)">
+                                <i class="bi bi-trash"></i></a>
+                              <div class="modal fade" id="deleteModal{{p.id}}" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">
+                                        <b>Are you sure you want to delete
+                                          <i class="text-danger">'{{p.title|title}}'</i></b>
+                                      </h5>
+                                      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      Select "Delete" below if you want to delete the post
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                                        Cancel
+                                      </button>
+                                      <a class="btn btn-danger" href="{% url 'accounts:delete_post' p.slug %}">Delete</a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </small>
+                            <small>
+                              <a href="{% url 'accounts:update_post' p.slug %}" class="btn btn-sm"><i class="fa fa-edit"></i>
+                              </a>
+                            </small>
+                          </div>
+                      </div>
+                      <div class="card-body">
+                         <img src='{{p.image.url}}' style='height: 400px;' class='rounded w-100'>
+                          
+                      </div>
+                      
+                      <div class="card-footer">
+                         <h5 class="card-title h5 text-black">{{p.title}}</h5>
+                         <div class='text-muted'>
+                          <small class='m-2'> <i class='fa fa-clock'></i> {{p.date_published|timesince|upto:','}} ago</small>
+                          <small class='m-2'><i class='fas fa-eye'></i> {{p.total_views}}</small>
+                          <small class='m-2'>
+                              <a href="{% url 'blog:like_post' p.slug %}" class='text-decoration-none text-dark'>
+                              {% if request.user in p.likes.all %}
+                              
+                              <i class='bi bi-heart-fill text-danger'></i> 
+                              {% else %}
+                              <i class='bi bi-heart'></i> 
+                              {% endif %}
+                              </a>
+                                  {{p.total_likes}}</small>
+                          <small class='m-2'><i class='bi bi-chat-right-text'></i> {{p.total_comments}}</small>
+                            </div>
+                          <p class="card-text mt-1 text-black">
+                            {{p.overview|truncatechars:120}}
+                        </p>
+                          <a href="{% url 'accounts:dashboard_post_detail' p.slug %}" class="btn btn-sm btn-primary" style='float: right;'>Read more</i></a>
+                      </div>
+                  </div>
+              </div>
+                        {% endfor %}
+              </div>
+              {%else%}
+              
+              <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                {% if request.user == user %}  
+                Dear {{request.user}} you have't created any post yet <a href="{% url 'accounts:create_post' %}" class="float-lg-right alert-link btn btn-secondary">Get started</a>
+                  
+                  {%else%}
+                  <span style="font-weight: bolder;">{{user}}</span> has not published any post yet
+                  {%endif%}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {%endif%}
+            </div>
+        
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div>
+
+
+
+
+
+
+
+
+
+  
+
+{% endblock content %}

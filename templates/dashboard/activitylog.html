@@ -1,0 +1,71 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load only_hours %}
+{% block content %}
+<h1 class='h1 text-center'>ActivityLog</h1>
+{% if actions %}
+<div class='float-right mr-4 mb-2'>
+            <div class="btn-group">
+                <a data-toggle="modal" data-target="#clearModal" class="btn btn-outline-danger btn-sm"
+                               href="javascript:void(0)">
+                                Clear all <i class='fas fa-times'></i></a>
+                <a href='#footer' class="btn btn-outline-dark btn-sm">
+                    <i class='fas fa-angle-down'></i>
+                </a>
+
+            </div>
+        </div>
+
+
+    
+
+    <!--confirm Modal-->
+    <div class="modal fade" id="clearModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class='fa fa-times'></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">Do you wish to clear all your  logs? this cannot be undone<p class='text-danger'>Click clear to proceed</p>.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" href="{% url 'accounts:clear' obj='activitylog'%}">Clear</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<div class="row container-fluid">
+    
+{% for a in actions %}
+
+    <div class="col-xl-3 col-md-6 mb-0 ">
+                            <div class="card border-left-{{a.level}} shadow h-80">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col">
+                                            <div class="text-xs font-weight-bold text-{{a.level}} text-uppercase">
+                                                {{a.activity_date}}    
+                                            </div>
+                                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                                {{a.activity}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+{% endfor %}
+
+                    </div>
+{% if not actions %}
+<center class='container mt-3'>
+    <div class="alert alert-info"><b>No activity recorded yet</b></div>
+</center>
+{% endif %}
+{% endblock content %}
+

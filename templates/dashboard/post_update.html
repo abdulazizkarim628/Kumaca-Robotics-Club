@@ -1,0 +1,50 @@
+{% extends "dashboard/base.html" %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container jumbotron">
+    <h4 class="h2 text-center">Update <span class='text-success'>'{{form.instance.title}}'</span></h4>
+    <form action="{% url 'accounts:update_post' post.slug %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy }}
+        <div class='float-right'>
+            <div class="btn-group">
+                <button class="btn btn-outline-dark btn-sm" name="action" value="SAVE_AS_DRAFT" type="submit">SAVE AS
+                    DRAFT
+                </button>
+
+                <button data-toggle="modal" data-target="#saveChangesModal" type='button' class="btn btn-outline-primary btn-sm">PUBLISH 
+                </button>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="saveChangesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Save Update?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class='fa fa-times'></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">Click "save changes" to proceed.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary"  value="PUBLISH" type="submit" name="action">Save changes</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </form>
+</div>
+{% comment "" %}
+{{form.media}} is very much required in every form
+{% endcomment %}
+{{form.media}}
+
+
+
+
+{% endblock content %}

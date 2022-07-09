@@ -1,0 +1,25 @@
+{% extends "dashboard/base.html" %}
+
+
+{% load static i18n crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <h4 class="h2 text-center">Create A New Post</h4>
+    <form action="{% url 'accounts:create_post' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy }}
+        <div class='float-right'>
+            <div class="btn-group">
+                <button type="reset" class="btn btn-outline-danger btn-sm">Reset Form</button>
+                <button class="btn btn-outline-dark btn-sm" name="action" value="SAVE_AS_DRAFT" type="submit">SAVE AS
+                    DRAFT
+                </button>
+
+                <button class="btn btn-outline-primary btn-sm" name="action" value="PUBLISH" type="submit">PUBLISH
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{{form.media}}
+{% endblock content %}

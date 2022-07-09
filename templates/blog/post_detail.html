@@ -1,0 +1,452 @@
+{% extends 'base.html' %}
+{% load  static %}
+{% block title %}{{post.title|title}}{% endblock title %}
+{% block link1 %}Blog{% endblock %}{% block endlink %}{{post}}{% endblock %}
+{% load only_hours%}
+{% load remove_hashtag %}
+{% block content %}
+
+{% if messages %}
+<div class="messages w-50 container-fluid" data-aos='zoom-out'>
+    {% for message in messages %}
+    <div class="alert alert-success">{{ message }}
+        <button type="button" class="btn-close" style='float:right;' data-bs-dismiss="alert"
+                aria-label="Close"></button>
+    </div>
+
+    {% endfor %}
+</div>
+{% endif %}
+<div class='mt-5'>
+    <div class="row">
+        <!-- Post detail#-->
+        <main class=" col-lg-8 ">
+            <div class="container-fluid shadow-lg" data-aos='fade-right'>
+                <div class="post-single p-3">
+                    <h2><b>Post detail</b></h2>
+                    <div class="post-thumbnail">
+                        
+                            
+                        <img draggable='false' class='img-fluid mt-2 w-100' style='height: 500px;'
+                             src="{{ post.image.url }}" alt="{{post.title}}">
+                             <h3 id="post-title" class='mt-3'>{{ post.title|title }} </h3>
+                    </div>
+                    <div class="post-details">
+                        <div class="post-meta d-flex justify-content-between">
+
+                            <div class="category">
+                                <b>
+                                <a href="{% url 'blog:category' post.category.slug %}"
+                                   class='text-danger'>{{ post.category|title }}</a>
+                                </b>
+
+                            </div>
+                        </div>
+                        
+
+                        </h1>
+                        <div class="post-footer d-flex align-items-center flex-column flex-sm-row">
+                            <span
+                               class="text-dark d-flex align-items-center flex-wrap shadow-lg m-3 rounded">
+                                <div class="avatar">
+                                    <a class='text-decoration-none' href="{% url 'accounts:profile' post.author %}">
+                                    <img draggable='false' class='rounded-circle img-fluid' height='30' width='40'
+                                         src="{{ post.author.profile_picture.url }}" alt="{{post.author}}">
+                                         <b class="title h5 m-2 text-success" style="font-weight: bolder;">{{ post.author }} </b></a>
+                                    </div>
+                                
+                            </span>
+
+                            <div class=" text-muted">
+                                <span class="date"><i class='fa fa-clock'></i> {{ post.date_published|timesince|upto:',' }} ago </span>
+                                <span class="views m-2"><i class="fas fa-eye"></i> {{post.total_views}} </span>
+                                <span class="comments meta-last"> <i class="bi bi-chat-right-text"></i> {{ post.total_comments }} </span>
+                               
+                    <span id='likes' class="m-2">
+                         <audio id="like_audio" hidden readonly src="{% static 'audio/like.mp3' %}" preload="auto"></audio>
+                         <a onclick="document.getElementById('like_audio').play();" href="{% url 'blog:like_post' post.slug %}" class='text-decoration-none text-dark'>
+     
+                            <i class='bi bi-heart{% if request.user in post.likes.all %}-fill text-danger{% endif %}'></i>
+                            </a>
+                    <span class='text-muted'>{{post.total_likes}}</span>
+                    </span>
+                    </span>
+                </span>
+                    <span class="m-2 text-dark"><a href="{% url 'blog:save_post' post_slug=post.slug %}" class='text-muted text-decoration-none'>
+                        <i class="bi bi-bookmark{% if post in request.user.author.saved_posts.all %}-fill text-primary{%endif%}"></i>
+                    </a>
+    
+
+                    <span class="dropdown">
+                        <span class="m-3" id="userDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-bs-haspopup="true" aria-expanded="false">
+                            <b>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><i class='bi bi-share'></i></span>
+                            </b>
+                    </span>
+                      
+                        <!-- Dropdown -->
+                        <ul class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
+                            
+                            <li class="dropdown">
+                                <a class='text-decoration-none dropdown-item' href="mailto:?subject={{ post.title }}&amp;body=Check out this article {{ request.build_absolute_uri }}"
+                                   target="_blank">
+                                    <i class="fa fa-envelope text-primary"></i>
+                                    Mail
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                               <a class='text-decoration-none dropdown-item' href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}"
+                                  target="_blank">
+                                    <i class="bi bi-linkedin text-primary"></i>
+                                    Linked in
+                                </a>
+                            </li>
+                            <li class='dropdown'>
+                                <a class='text-decoration-none dropdown-item' href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+                                   target="_blank">
+                                    <i class="bi bi-facebook text-primary"></i>
+                                    Facebook
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a class='text-decoration-none dropdown-item' href="http://twitter.com/share?text=I just published {{ post.title }}. &url={{ request.build_absolute_uri }}"
+                                   target="_blank">
+                                    <i class="bi bi-twitter text-primary"></i> Twitter</a>
+                                    
+                            </li>
+                            <li class="dropdown">
+                                <a class='text-decoration-none dropdown-item' href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri }}"
+                                   target="_blank">
+                                    <i class="bi bi-whatsapp text-success"></i> Whatsapp
+                                </a>
+                                    
+                            </li>
+                            <li class="dropdown">
+                                <a class='text-decoration-none dropdown-item' href="https://telegram.me/share/url?url={{ request.build_absolute_uri }}&text={{ post.title }}"
+                                   target="_blank">
+                                    <i class="bi bi-telegram text-primary"></i> Telegram</a>
+                            </li>
+                        </ul>
+                    </span>
+
+
+                </span>
+               
+                </div>
+                            
+                        </div>
+                        
+                        <div class='body'>
+                            {{post.content|safe}}
+                        </div>
+                        
+                    </div>
+                    
+
+                </div>
+
+                
+            </div>
+
+            <!-- author bio-->
+            <div class='shadow text-muted mt-3' data-aos='zoom-in' data-aos-delay='500'>
+            <div class="blog-author d-flex align-items-center " style='margin: 10px;'>
+                <img src="{{post.author.profile_picture.url}}" class="rounded-circle float-left m-3" style='width: 120px;' alt="{{post.author}}">
+                <div>
+                  <h4 class='text-black'>{{post.author}}</h4>
+                  <div>
+                    <a href="{{post.author.twitter_page}}" class='text-muted'><i class="bi bi-twitter"></i></a>
+                    <a href="{{post.author.facebook_page}}" class='text-muted'><i class="bi bi-facebook"></i></a>
+                    <a href="{{post.author.instagram_page}}" class='text-muted'><i class="bi bi-instagram"></i></a>
+                  </div>
+                  <p>
+                    {{post.author.bio}}
+                  </p>
+                </div>
+              </div>
+              
+            </div><!-- End blog author bio -->
+
+            <div data-aos='zoom-in' class='mt-4 container'>
+                <header class='pt-3'>
+                    <h3><span><b>{{post.total_comments}} comment{{post.total_comments|pluralize}}</b></span></h3>
+                </headder>
+
+                {% for comment in post.comments.all reversed %}
+
+                <div id='comment{{comment.id}}' class='p-3'>
+                        <a class='text-decoration-none text-dark' href="{% url 'accounts:profile' comment.author %}">
+                        <img src="{{ comment.author.profile_picture.url }}" height="50px;"
+                            width="50px;" alt="{{comment.author.user.username}}"
+                            class="img-fluid rounded-circle">
+                        <strong class="h5">{{ comment.author }}</strong>
+                    </a>
+                    <span  class="mt-3 m-3 text-dark" id="flush-heading{{comment.id}}"
+                        data-bs-toggle="collapse" data-bs-target="#flush-collapse{{comment.id}}" aria-expanded="false"
+                        aria-controls="flush-collapsecomment.id}}">
+                        <b class='h-3'>
+                            <a href='javascript:void(0)' class='text-dark'>
+                            <i class='bi bi-reply-fill'></i>
+                        {% if comment.replies.all %}
+                        View {{comment.replies.all.count}}
+                        repl{{comment.replies.all.count|pluralize:'y,ies'}}
+                        {% else %}
+                        Reply
+                        {% endif %}
+                        </a>
+                        </b>
+                    </span>
+
+                        <br><small class='text-muted'>{{comment.date_commented.date}}</small></p>
+                        
+                    <span>
+                            {{ comment.content }}
+                    </span>
+                    <!--
+                        Acordion with replies
+                    -->
+
+                    <div class="accordion accordion-flush">
+    
+                            
+                            <div id="flush-collapse{{comment.id}}" class="accordion-collapse collapse"
+                                 aria-labelledby="flush-heading{{comment.id}}"
+                                 data-bs-parent="#accordionFlushExample{{comment.id}}">
+                                <div class="accordion-body">
+                                    <form action="{% url 'blog:reply_comment' comment.id %}" class="input-group"
+                                          method="POST">{% csrf_token %}
+                                        
+                                        <input id="reply" type="text" required class=" form-control"
+                                               name="content"
+                                               placeholder="reply {{comment.author}}'s comment">
+                                        <button class="btn btn-primary btn-sm" type="submit"><i
+                                                class="bi bi-reply"></i></button>
+                                    </form>
+
+                                    {% for reply in comment.replies.all reversed %}
+                                    <div class="m-3">
+                                        <span class="h5">
+                                            <a class='text-decoration-none text-dark' href="{% url 'accounts:profile' reply.author %}">
+                                            <img src="{{ reply.author.profile_picture.url }}" height="28px;"
+                                                 width="30px;" alt="{{comment.author.user.username}}"
+                                                 class="img-fluid rounded-circle">
+                                            {{reply.author}}</a>
+                                            
+                                            </span><br>
+                                        <small class='text-muted'>{{reply.replied_at|timesince|upto:','}}
+                                            ago</small>
+                                        <p>{{reply.content}}</p>
+                                    </div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+
+                {% endfor %}
+                <div class="p-3 shadow"  id="add-comment" data-aos='zoom-in'>
+                    <h5 class="m-2"><b>Leave a comment</b></h5>
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'blog:comment' post.slug %}" class='mb-3' method='POST'>
+                        {% csrf_token %}
+                        
+                        <div>
+                <div class='form-floating'>
+                <textarea id='comment-form' class="form-control" style="height: 100px;" placeholder='Your comment*' required name='content'
+                          aria-label="With textarea"></textarea>
+                        <label form='comment-form'>Your comment*</label>
+                            <button class="btn btn-dark mt-4" type="submit">Post comment</button>
+                </div>
+
+                    </form>
+                    {% else %}
+                    <a href="{% url 'accounts:login' %}?next={{request.path}}"
+                       class="btn btn-outline-primary m-3">Login to write a comment</a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </main>
+        <aside class="col-lg-4" style="border-radius: 7px; margin-top: 30px;" data-aos='fade-left'>
+            <!-- Widget [Search Bar Widget]-->
+            <div class="widget search mb-5">
+                <header>
+                    <h3><b>Search</b></h3>
+                </header>
+                <form class="d-flex input-group" method="get" action="{% url 'blog:search' %}">
+                    <input class="form-control" name="q" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit"><i class="bi-search"></i></button>
+                </form>
+            </div>
+            <!-- Widget [Latest Posts Widget]        -->
+            <h3 class="pb-2" data-aos='zoom-in'><b>Recent Posts</b></h3>
+            <div class="blog-posts mb-5">
+                {% for p in latest_posts %}
+                
+                <div class="mb-3 d-flex align-items-center">
+                    <img height="100" width='100' class='border-5' style="border-radius: 7px;" src="{{p.image.url}}">
+                    <div class="pl-3 m-3">
+                        <h2 class="mb-2 h6 font-weight-bold">
+                            <a class="text-dark text-decoration-none h5" href="{% url 'blog:post_detail' p.slug %}">{{p.title}}</a>
+                        </h2>
+                        <div class="card-text text-dark small">
+                            <a href="{% url 'accounts:profile' p.author%}" style="font-weight: bolder;" class="text-decoration-none">
+                                <img height="30" class="rounded-circle shadow" style="border-radius: 50%;" src="{{ p.author.profile_picture.url }}">
+                            {{ p.author }}</a> in 
+                            <a class="text-dark" href="{% url 'blog:category' slug=p.category.slug %}">{{p.category}} </a>
+
+                        </div>
+                        <small class="text-muted"><i class="fa fa-clock"></i> {{p.date_published.date|timesince|upto:';'}} ago<i class="fas fa-eye m-1"></i> {{p.total_views}}
+                            <small class='m-2'>
+                                <a href="{% url 'blog:like_post' p.slug %}" class='text-decoration-none text-dark'>
+                        {% if request.user in p.likes.all %}
+                        
+                        <i class='bi bi-heart-fill text-danger'></i> 
+                        {% else %}
+                        <i class='bi bi-heart'></i> 
+                        {% endif %}
+                        </a>
+                            </i> {{p.total_likes}}</small>
+                            <small class='m-2'><i class='bi bi-chat-right-text'></i> {{p.total_comments}}</small>
+                        
+                        </small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+
+            <!-- Widget [Categories Widget]-->
+            <div class="widget shadow border">
+                <h4 class='m-3'><b>Categories</b></h4>
+                <div class='m-2'>
+                    {% for category in categories %}
+                        <a href="{% url 'blog:category' slug=category.slug %}" class="text-dark btn m-1 btn-outline-warning border"
+                           style="text-decoration: none;">
+                            {{ category }}
+                        </a><br>
+                    {% endfor %}
+                    </div>
+                
+            </div>
+            <!-- Widget [Tags Cloud Widget]-->
+        
+
+            <div class=" mt-5 shadow border">
+                <h4 class='m-3'><b>Tags</b></h4>
+                    {% for tag in post.tags.all %}
+                    <span class='m-2'>
+                        <a href="{% url 'blog:tag_list' tag.name %}" class="h5 text-dark btn btn-outline-danger border"
+                           style="text-decoration: none;">
+                            {{ tag.name|remove_hashtag }}
+                        </a>
+                    </span>
+                    {% endfor %}
+            </div>
+            
+        
+        </aside>
+    </div>
+</div>
+
+{% if r_post %}
+<div class="mb-4 mt-4 shadow">
+    <h5 class="font-weight-bold p-3"><span><b>Read next</b></span></h5>
+
+    <div class="row container">
+
+        <div class="col-lg-5">
+
+            <div class="card border-0 mb-4 h-xl-300" data-aos='fade-right'>
+                <div style="background-image: url({% static 'images/logo.png' %});">
+                    <img class='img-fluid' src="{{ first.image.url }}"
+                         style="height: 15em; background-size: cover; border-radius:7px; background-repeat: no-repeat; width: 100%;"
+                         alt="">
+                </div>
+                <div class="card-body px-0 pb-0 d-flex flex-column align-items-start">
+                    <h2 class="h4 font-weight-bold">
+                        <a class="text-dark text-decoration-none ml-2" href="{% url 'blog:post_detail' first.slug %}"> {{ first.title}} </a>
+                    </h2>
+
+                    <div>    
+                    <p class="card-text ml-2">
+                        {{first.overview|truncatechars:150}}
+                    </p>
+                    <div>
+                        <small class="d-block">
+                            <a class="text-primary text-decoration-none" style="font-weight: bolder;" href="{% url 'accounts:profile' first.author %}">
+                            <img height="30" class="rounded-circle shadow text-decoration-none" style="border-radius: 50%;"
+                                 src="{{ post.author.profile_picture.url }}">
+                            {{first.author}}</a></small>
+                        <small class="text-muted"><i class="fa fa-clock"></i> {{first.date_published.date|timesince|upto:';'}} ago
+                            <i class="fas fa-eye m-1"></i> {{first.total_views}} 
+                        
+                            <small class='m-2'>
+                                <a href="{% url 'blog:like_post' first.slug %}" class='text-decoration-none text-dark'>
+                        {% if request.user in first.likes.all %}
+                        
+                        <i class='bi bi-heart-fill text-danger'></i> 
+                        {% else %}
+                        <i class='bi bi-heart'></i> 
+                        {% endif %}
+                        </a>
+                            </i> {{first.total_likes}}</small>
+                            <small class='m-2'><i class='bi bi-chat-right-text'></i> {{first.total_comments}}</small>
+                        
+                        </small>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-6" >
+
+            <div class="flex-md-row mb-4 box-shadow h-xl-300 mb-4" data-aos="fade-left" style="border-radius: 10px; margin: 3px; padding: 5px;">
+                {% for p in last %}
+                <div class="mb-3 d-flex align-items-center">
+                    <img height="100" width='100' class='border-5' style="border-radius: 7px;" src="{{p.image.url}}">
+                    <div class="pl-3 m-3">
+                        <h2 class="mb-2 h6 font-weight-bold">
+                            <a class="text-dark text-decoration-none h5" href="{% url 'blog:post_detail' p.slug %}">{{p.title}}</a>
+                        </h2>
+                        <div class="card-text text-dark small">
+                            <a href="{% url 'accounts:profile' p.author%}" style="font-weight: bolder;" class="text-decoration-none">
+                                <img height="30" class="rounded-circle shadow" style="border-radius: 50%;" src="{{ p.author.profile_picture.url }}">
+                            {{ p.author }}</a> in 
+                            <a class="text-dark" href="{% url 'blog:category' slug=p.category.slug %}">{{p.category}} </a>
+
+                        </div>
+                        <small class="text-muted"><i class="fa fa-clock"></i><span class='m-2'> {{p.date_published.date|timesince|upto:';'}} ago</span><i class="fas fa-eye"></i> {{p.total_views}}
+                            <small class='m-2'>
+                                <a href="{% url 'blog:like_post' p.slug %}" class='text-decoration-none text-dark'>
+                        {% if request.user in p.likes.all %}
+                        
+                        <i class='bi bi-heart-fill text-danger'></i> 
+                        {% else %}
+                        <i class='bi bi-heart'></i> 
+                        {% endif %}
+                        </a>
+                            </i> {{p.total_likes}}</small>
+                            <small class='m-2'><i class='bi bi-chat-right-text'></i> {{p.total_comments}}</small>
+                        
+                        </small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+{% endif %}
+
+
+{% endblock content %}
