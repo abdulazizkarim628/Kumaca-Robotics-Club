@@ -1,1 +1,0 @@
-web gunicorn kumaca_robotics.wsgi:application --log-file -
