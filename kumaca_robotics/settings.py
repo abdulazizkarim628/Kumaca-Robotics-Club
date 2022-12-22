@@ -154,14 +154,14 @@ CKEDITOR_CONFIGS = {
         'toolbar': None,
     },
 }
-
+'''
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': "incredible-programmer",
     'API_KEY': "282161682841714",
     'API_SECRET': "Z2JqEyFkAYq2zA997XK_8ISa2D4"
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
+'''
 
 
 # Default primary key field type

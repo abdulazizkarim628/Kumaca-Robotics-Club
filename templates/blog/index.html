@@ -1,8 +1,8 @@
+<!DOCTYPE html>
 {% load static %}
 {% load only_hours %}
 {% load static %}
 
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -77,6 +77,19 @@
                 <a href="#login">Log In</a>
                 <li>
                 {% endif %}
+              </li>
+            </ul>
+          </li>
+
+          <li class="dropdown"><a href="javascript:void(0)">
+            <span class=""><i class="bi bi-search"></i></span>
+          </a>
+            <ul>
+              <li>
+                <form class="d-flex input-group m-1" method="get" action="{% url 'blog:search' %}">
+                  <input class="form-control" name="q" required type="search" placeholder="Search the blog" aria-label="Search">
+                  <button class="btn btn-outline-warning" type="submit"><i class="bi-search"></i></button>
+                </form>
               </li>
             </ul>
           </li>
@@ -246,6 +259,7 @@
         {% endfor %}
     </div>
 </div>
+      </div>
       </div>
     </section><!-- Blog -->
     {% endif %}
